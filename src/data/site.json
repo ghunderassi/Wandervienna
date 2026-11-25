@@ -9,10 +9,21 @@
   "googleSiteVerification": "jPygzQl3dLYHsZI7XMPOqvcxGUVZtEr6WiuGN_O2xjo",
   "footerText": "WanderVienna.com is your free guide to help choose the best day trips around Vienna. We test, evaluate and review daytrips in the most popular locations around Vienna for your benefit.",
   "footerDaytrips": [
-    { "label": "Hallstatt", "href": "/vienna-to-hallstatt-day-trip" },
-    { "label": "How to get to Hallstatt", "href": "/how-to-get-to-hallstatt-from-vienna" }
+    {
+      "label": "Hallstatt",
+      "href": "/vienna-to-hallstatt-day-trip"
+    },
+    {
+      "label": "How to get to Hallstatt",
+      "href": "/how-to-get-to-hallstatt-from-vienna"
+    }
   ],
-  "social": [{ "label": "TikTok", "href": "https://www.tiktok.com/@wandervienna1" }],
-  "contactFormAction": "",
-  "contactFormAccessKey": ""
+  "social": [
+    {
+      "label": "TikTok",
+      "href": "https://www.tiktok.com/@wandervienna1"
+    }
+  ],
+  "contactFormAction": "https://api.web3forms.com/submit",
+  "contactFormAccessKey": "c681cc3f-6a82-4b22-9284-64b8da62f5c8"
 }

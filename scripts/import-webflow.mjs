@@ -33,8 +33,8 @@ for (const p of PAGES) {
   const name = p === '/' ? 'index' : p.slice(1);
   await writeFile(`${RAW_DIR}/${name}.html`, html);
   console.log(res.status, p, html.length);
-  for (const m of html.matchAll(/https:\/\/(?:cdn\.prod\.website-files\.com|uploads-ssl\.webflow\.com|assets\.website-files\.com)\/[^"'\s,)]+/g)) {
-    let u = m[0].replace(/&amp;/g, '&');
+  for (const m of html.matchAll(/https:\/\/(?:cdn\.prod\.website-files\.com|uploads-ssl\.webflow\.com|assets\.website-files\.com)\/[^"'\s,]+/g)) {
+    let u = m[0].replace(/&amp;/g, '&').replace(/\)+;?$/, (x) => (/\(/.test(m[0]) ? x : ''));
     if (/\.css(\?|$)/.test(u)) { cssUrls.add(u); continue; }
     if (/\.js(\?|$)/.test(u)) continue;
     if (!/\.(webp|png|jpe?g|gif|svg|avif|ico|mp4|webm)$/i.test(u)) continue;

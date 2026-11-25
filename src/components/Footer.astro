@@ -1,0 +1,28 @@
+---
+import site from '../data/site.json';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-about">
+      <a class="brand brand-light" href="/">{site.logoText}</a>
+      <p>{site.footerText}</p>
+    </div>
+    <div class="footer-links">
+      <div>
+        <p class="footer-title">Daytrips</p>
+        {site.footerDaytrips.map((l) => <a href={l.href}>{l.label}</a>)}
+      </div>
+      <div>
+        <p class="footer-title">Company</p>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div>
+        <p class="footer-title">Social Media</p>
+        {site.social.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      </div>
+    </div>
+  </div>
+  <div class="footer-legal">© {year} WanderVienna.com. All rights reserved.</div>
+</footer>

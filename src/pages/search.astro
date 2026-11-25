@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Search Results" description="Search the WanderVienna day trip guides." noindex>
+  <div class="container-narrow search-page">
+    <h1>Search results</h1>
+    <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+    <div id="search"></div>
+    <script is:inline src="/pagefind/pagefind-ui.js"></script>
+    <script is:inline>
+      window.addEventListener('DOMContentLoaded', () => {
+        if (!window.PagefindUI) return;
+        const ui = new PagefindUI({ element: '#search', showSubResults: true, showImages: false });
+        const q = new URLSearchParams(location.search).get('q') || new URLSearchParams(location.search).get('query');
+        if (q) ui.triggerSearch(q);
+      });
+    </script>
+  </div>
+</Base>

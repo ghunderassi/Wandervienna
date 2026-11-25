@@ -1,0 +1,123 @@
+# Pages CMS configuration — edit the site in the browser at https://app.pagescms.org
+media:
+  input: public/images
+  output: /images
+
+content:
+  - name: guides
+    label: Guides (articles)
+    type: collection
+    path: src/content/guides
+    filename: "{fields.title}.md"
+    view:
+      fields: [title, dateModified]
+    fields:
+      - { name: title, label: Page heading (H1), type: string, required: true }
+      - { name: seoTitle, label: SEO title (browser tab / Google), type: string, required: true }
+      - { name: description, label: Meta description, type: text, required: true }
+      - { name: datePublished, label: Published, type: date, required: true }
+      - { name: dateModified, label: Last updated, type: date, required: true }
+      - { name: hero, label: Hero image, type: image, required: true }
+      - { name: heroAlt, label: Hero image alt text, type: string, required: true }
+      - { name: ogImage, label: Social share image, type: image }
+      - { name: author, label: Author, type: string, default: Balázs Sipos }
+      - name: tours
+        label: Comparison table (tours)
+        type: object
+        list: true
+        fields:
+          - { name: name, label: Name, type: string }
+          - { name: operator, label: Operator, type: string }
+          - { name: url, label: Tour link, type: string }
+          - { name: bookUrl, label: Book now link, type: string }
+          - { name: logo, label: Operator logo, type: image }
+          - { name: images, label: Photos, type: image, list: true }
+          - { name: rating, label: Rating, type: string }
+          - { name: reviews, label: Reviews text, type: string }
+          - name: features
+            label: Features
+            type: object
+            list: true
+            fields:
+              - { name: text, label: Text, type: string }
+              - { name: tip, label: Tooltip, type: string }
+          - { name: price, label: Price, type: string }
+          - { name: review, label: Full review anchor (e.g. "#1"), type: string }
+      - name: related
+        label: Related articles (sidebar)
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string }
+          - { name: href, label: Link, type: string }
+          - { name: image, label: Image, type: image }
+      - name: body
+        label: Article (Markdown)
+        type: code
+        options:
+          format: markdown
+
+  - name: about
+    label: About page
+    type: file
+    path: src/content/pages/about.md
+    fields:
+      - { name: title, label: Page heading (H1), type: string }
+      - { name: seoTitle, label: SEO title, type: string }
+      - { name: description, label: Meta description, type: text }
+      - { name: image, label: Photo, type: image }
+      - { name: imageAlt, label: Photo alt text, type: string }
+      - { name: body, label: Text, type: rich-text }
+
+  - name: home
+    label: Homepage
+    type: file
+    path: src/data/home.json
+    format: json
+    fields:
+      - { name: seoTitle, label: SEO title, type: string }
+      - { name: description, label: Meta description, type: text }
+      - { name: heading, label: Page heading (H1), type: string }
+      - { name: sectionTitle, label: Section title, type: string }
+      - { name: intro, label: Intro text, type: text }
+      - name: cards
+        label: Day trip cards
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Title, type: string }
+          - { name: href, label: Link, type: string }
+          - { name: image, label: Image, type: image }
+          - { name: alt, label: Image alt text, type: string }
+
+  - name: site
+    label: Site settings
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Site name, type: string }
+      - { name: url, label: Site URL, type: string }
+      - { name: logoText, label: Logo text, type: string }
+      - { name: defaultOgImage, label: Default share image, type: image }
+      - { name: googleAnalyticsId, label: Google Analytics ID, type: string }
+      - { name: googleAdsId, label: Google Ads ID, type: string }
+      - { name: getYourGuidePartnerId, label: GetYourGuide partner ID, type: string }
+      - { name: googleSiteVerification, label: Google site verification, type: string }
+      - { name: footerText, label: Footer text, type: text }
+      - name: footerDaytrips
+        label: Footer "Daytrips" links
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: Link, type: string }
+      - name: social
+        label: Social links
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: Link, type: string }
+      - { name: contactFormAction, label: Contact form endpoint (e.g. https://api.web3forms.com/submit), type: string }
+      - { name: contactFormAccessKey, label: Contact form access key, type: string }

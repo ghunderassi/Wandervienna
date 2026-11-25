@@ -1,0 +1,50 @@
+---
+import site from '../data/site.json';
+const explore = [
+  { label: "Insider's Guide: Vienna To Hallstatt Day Trip (Personally tested)", href: '/vienna-to-hallstatt-day-trip' },
+  { label: 'How to get to Hallstatt', href: '/how-to-get-to-hallstatt-from-vienna' },
+];
+---
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/">{site.logoText}</a>
+    <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Menu">
+      <span class="burger" aria-hidden="true"></span>
+    </button>
+    <nav id="main-nav" aria-label="Main">
+      <ul class="nav-list">
+        <li class="has-dropdown">
+          <button type="button" class="nav-link dropdown-toggle" aria-expanded="false">Explore <span aria-hidden="true">▾</span></button>
+          <div class="dropdown">
+            <p class="dropdown-label">📈 popular</p>
+            {explore.map((l) => <a href={l.href}>{l.label}</a>)}
+          </div>
+        </li>
+        <li><a class="nav-link" href="/about">About</a></li>
+        <li><a class="nav-link" href="/contact">Contact</a></li>
+        <li><a class="nav-link" href="/search" aria-label="Search">Search</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<script>
+  document.documentElement.classList.add('js');
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') !== 'true';
+    toggle.setAttribute('aria-expanded', String(open));
+    document.querySelector('.site-header')?.classList.toggle('nav-open', open);
+  });
+  const dd = document.querySelector<HTMLButtonElement>('.dropdown-toggle');
+  dd?.addEventListener('click', () => {
+    const open = dd.getAttribute('aria-expanded') !== 'true';
+    dd.setAttribute('aria-expanded', String(open));
+    dd.parentElement?.classList.toggle('open', open);
+  });
+  document.addEventListener('click', (e) => {
+    if (dd && !dd.parentElement?.contains(e.target as Node)) {
+      dd.setAttribute('aria-expanded', 'false');
+      dd.parentElement?.classList.remove('open');
+    }
+  });
+</script>

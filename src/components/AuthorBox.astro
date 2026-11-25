@@ -1,0 +1,14 @@
+---
+interface Props { author: string; published: Date; modified: Date }
+const { author, published, modified } = Astro.props;
+const fmt = (d: Date) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+<p class="article-dates">
+  Published: <time datetime={iso(published)}>{fmt(published)}</time><br />
+  Last updated: <time datetime={iso(modified)}>{fmt(modified)}</time>
+</p>
+<div class="author">
+  <img src="/images/untitled-design-20316cd9.webp" alt={`Portrait of ${author}`} width="48" height="48" />
+  <p><strong>Author:</strong> <a href="/about">{author}</a> — Owner &amp; Author</p>
+</div>

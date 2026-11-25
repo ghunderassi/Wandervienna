@@ -1,0 +1,64 @@
+---
+import { dims } from '../lib/html';
+interface Tour {
+  name: string; operator: string; url: string; bookUrl: string; logo: string; images: string[];
+  rating: string; reviews: string; features: { text: string; tip?: string }[]; price: string; review?: string | null;
+}
+interface Props { tours: Tour[]; heading?: string }
+const { tours, heading = 'Summary & Comparison — 5+1 Best Hallstatt day trips' } = Astro.props;
+const icons = [
+  { src: '/images/tripadvisor-icon-bffd9e8b.png', alt: 'TripAdvisor' },
+  { src: '/images/viator-icon-bffd9e8d.png', alt: 'Viator' },
+  { src: '/images/getyourguide-icon-bffd9e8c.png', alt: 'GetYourGuide' },
+];
+const rankOf = (name: string) => name.match(/^([\d+]+)\.\s*/)?.[1] ?? '';
+const titleOf = (name: string) => name.replace(/^[\d+]+\.\s*/, '');
+---
+<section class="compare" id="packages" aria-labelledby="compare-heading">
+  <h2 id="compare-heading">{heading}</h2>
+  <ol class="tour-list">
+    {tours.map((t) => (
+      <li class="tour-card">
+        <span class="tour-rank" aria-hidden="true">{rankOf(t.name)}</span>
+        <div class="tour-gallery" tabindex="0" aria-label={`Photos: ${titleOf(t.name)}`}>
+          {t.images.map((src, i) => {
+            const d = dims(src);
+            return <img src={src} alt={`${titleOf(t.name)} – photo ${i + 1}`} loading="lazy" decoding="async" width={d?.width} height={d?.height} />;
+          })}
+        </div>
+        <div class="tour-main">
+          <div class="tour-head">
+            <a href={t.url} target="_blank" rel="nofollow sponsored noopener" class="tour-logo">
+              <img src={t.logo} alt={`${t.operator} logo`} width="56" height="56" loading="lazy" />
+            </a>
+            <div>
+              <h3 class="tour-name"><a href={t.url} target="_blank" rel="nofollow sponsored noopener">{t.name}</a></h3>
+              <p class="tour-operator">{t.operator}</p>
+            </div>
+          </div>
+          <div class="tour-rating">
+            {icons.map((i) => <img src={i.src} alt={i.alt} width="20" height="20" loading="lazy" />)}
+            <span class="stars" aria-hidden="true">★★★★★</span>
+            <span class="score">{t.rating}</span>
+            <span class="count">{t.reviews}</span>
+          </div>
+          <ul class="tour-features">
+            {t.features.map((f) => (
+              <li>
+                {f.text}
+                {f.tip && (
+                  <span class="tip" tabindex="0" role="note" aria-label={f.tip} data-tip={f.tip}>ⓘ</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="tour-cta">
+          <span class="tour-price">{t.price}</span>
+          <a class="btn btn-book" href={t.bookUrl} target="_blank" rel="nofollow sponsored noopener">BOOK NOW →</a>
+          {t.review && <a class="tour-review-link" href={t.review}>Read Full Review →</a>}
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>

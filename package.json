@@ -1,0 +1,16 @@
+{
+  "name": "wandervienna",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && pagefind --site dist",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.4.13",
+    "image-size": "^2.1.0",
+    "pagefind": "^1.6.0"
+  }
+}

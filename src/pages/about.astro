@@ -1,0 +1,25 @@
+---
+import { getEntry } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { enhance, dims } from '../lib/html';
+import { organization, breadcrumbs } from '../lib/schema';
+import site from '../data/site.json';
+
+const page = (await getEntry('pages', 'about'))!;
+const d = page.data;
+const img = d.image ? dims(d.image) : null;
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'AboutPage', url: `${site.url}/about`, name: d.title, publisher: organization },
+  { '@context': 'https://schema.org', '@type': 'Person', name: 'Balázs Sipos', url: `${site.url}/about`, worksFor: { '@id': organization['@id'] } },
+  breadcrumbs([{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }]),
+];
+---
+<Base title={d.seoTitle} description={d.description} ogImage={d.ogImage || d.image} jsonLd={jsonLd}>
+  <div class="about container" data-pagefind-body>
+    {d.image && <img class="about-image" src={d.image} alt={d.imageAlt ?? ''} width={img?.width} height={img?.height} />}
+    <div class="prose">
+      <h1>{d.title}</h1>
+      <Fragment set:html={enhance(page.rendered?.html ?? '')} />
+    </div>
+  </div>
+</Base>

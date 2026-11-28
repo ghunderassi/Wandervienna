@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import home from '../data/home.json';
+import site from '../data/site.json';
+import { dims } from '../lib/html';
+import { organization } from '../lib/schema';
+
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${site.url}/#website`, name: site.name, url: `${site.url}/`, publisher: { '@id': organization['@id'] },
+    potentialAction: { '@type': 'SearchAction', target: `${site.url}/search?q={search_term_string}`, 'query-input': 'required name=search_term_string' } },
+  { '@context': 'https://schema.org', ...organization },
+];
+const isExternal = (h: string) => /^https?:/.test(h);
+---
+<Base title={home.seoTitle} description={home.description} jsonLd={jsonLd}>
+  <div class="home" data-pagefind-body>
+    <h1 class="home-title">{home.heading}</h1>
+    <div class="section-divider"><h2>{home.sectionTitle}</h2></div>
+    <p class="home-intro">{home.intro}</p>
+    <ul class="card-grid">
+      {home.cards.map((c) => {
+        const d = dims(c.image);
+        return (
+          <li>
+            <a class="card" href={c.href} {...(isExternal(c.href) ? { target: '_blank', rel: 'nofollow sponsored noopener' } : {})}>
+              <img src={c.image} alt={c.alt} width={d?.width} height={d?.height} loading="lazy" decoding="async" />
+              <h3>{c.title}</h3>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</Base>

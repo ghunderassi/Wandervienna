@@ -1,0 +1,121 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ComparisonTable from '../components/ComparisonTable.astro';
+import AuthorBox from '../components/AuthorBox.astro';
+import { enhance, splitPlaceholders, toc } from '../lib/html';
+import { article, breadcrumbs } from '../lib/schema';
+import { dims } from '../lib/html';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides');
+  return guides.map((g) => ({ params: { guide: g.id }, props: { g } }));
+}
+const { g } = Astro.props;
+const d = g.data;
+const path = `/${g.id}`;
+const html = enhance(g.rendered?.html ?? '');
+const parts = splitPlaceholders(html);
+// Everything after {{toc}} is laid out next to a sticky sidebar.
+const tocIndex = parts.findIndex((p) => p.type === 'slot' && p.value === 'toc');
+const before = tocIndex === -1 ? parts : parts.slice(0, tocIndex);
+const after = tocIndex === -1 ? [] : parts.slice(tocIndex + 1);
+const tocItems = toc(after.map((p) => (p.type === 'html' ? p.value : '')).join(''));
+const hero = dims(d.hero);
+const jsonLd = [
+  article({ path, headline: d.title, description: d.description, image: d.ogImage || d.hero, author: d.author, published: d.datePublished, modified: d.dateModified }),
+  breadcrumbs([{ name: 'Home', path: '/' }, { name: d.title, path }]),
+];
+---
+<Base title={d.seoTitle} description={d.description} ogImage={d.ogImage || d.hero} ogType="article" jsonLd={jsonLd}>
+  <div class="progress" aria-hidden="true"><span></span></div>
+  <img class="hero" src={d.hero} alt={d.heroAlt} width={hero?.width} height={hero?.height} fetchpriority="high" />
+  <article data-pagefind-body>
+    <header class="article-header container-narrow">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> » <span>{d.title}</span></nav>
+      <h1>{d.title}</h1>
+      <AuthorBox author={d.author} published={d.datePublished} modified={d.dateModified} />
+    </header>
+    <div class="prose container-narrow intro">
+      {before.map((p) =>
+        p.type === 'html' ? <Fragment set:html={p.value} /> : p.value === 'comparison-table' && d.tours ? <ComparisonTable tours={d.tours} /> : null,
+      )}
+    </div>
+    {after.length > 0 && (
+      <div class="article-grid">
+        <aside class="sidebar">
+          <div class="sticky">
+            {tocItems.length > 0 && (
+              <nav class="toc" aria-label="Table of contents">
+                <p class="sidebar-title">Table of Contents</p>
+                <ol>{tocItems.map((t) => <li><a href={`#${t.id}`}>{t.text}</a></li>)}</ol>
+              </nav>
+            )}
+            {d.related.length > 0 && (
+              <div class="related">
+                <p class="sidebar-title">Related articles</p>
+                {d.related.map((r) => (
+                  <a class="related-item" href={r.href}>
+                    <img src={r.image} alt="" width="80" height="80" loading="lazy" />
+                    <span>{r.title}</span>
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </aside>
+        <div class="prose article-body">
+          {after.map((p) => (p.type === 'html' ? <Fragment set:html={p.value} /> : null))}
+        </div>
+      </div>
+    )}
+  </article>
+  <a class="to-top" href="#main" aria-label="Back to top">↑</a>
+  <script>
+    // Reading progress bar
+    const bar = document.querySelector<HTMLElement>('.progress span');
+    const onScroll = () => {
+      const h = document.documentElement;
+      const p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
+      if (bar) bar.style.transform = `scaleX(${p})`;
+      document.body.classList.toggle('scrolled', h.scrollTop > 600);
+    };
+    document.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    // "Load more" sections: collapsed until opened (content stays in the HTML for search engines).
+    // Consecutive sections share one button.
+    const groups: HTMLElement[][] = [];
+    document.querySelectorAll<HTMLElement>('.prose .more').forEach((el) => {
+      const prev = el.previousElementSibling;
+      if (prev && prev.classList.contains('more') && groups.length) groups[groups.length - 1].push(el);
+      else groups.push([el]);
+    });
+    const expand = (g: HTMLElement[], btn: HTMLElement) => {
+      g.forEach((el) => el.classList.remove('collapsed', 'more-hidden'));
+      btn.remove();
+    };
+    groups.forEach((g) => {
+      g[0].classList.add('collapsed');
+      g.slice(1).forEach((el) => el.classList.add('more-hidden'));
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'btn btn-more';
+      btn.textContent = 'LOAD MORE →';
+      btn.addEventListener('click', () => expand(g, btn));
+      g[g.length - 1].after(btn);
+      (g as any).btn = btn;
+    });
+    // Links pointing inside a collapsed section open it first.
+    const openFor = (hash: string) => {
+      const target = hash.length > 1 ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+      if (!target) return;
+      const g = groups.find((g) => g.some((el) => el.contains(target)));
+      if (g && (g as any).btn?.isConnected) expand(g, (g as any).btn);
+    };
+    document.addEventListener('click', (e) => {
+      const a = (e.target as Element).closest?.('a[href^="#"]');
+      if (a) openFor(a.getAttribute('href')!);
+    });
+    openFor(location.hash);
+  </script>
+</Base>

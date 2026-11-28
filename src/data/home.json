@@ -1,0 +1,14 @@
+{
+  "seoTitle": "Best Day Trips from Vienna (Personally Tested) — WanderVienna",
+  "description": "The WanderVienna offers detailed guides and field-tested recommendations for the best day trips around Vienna",
+  "heading": "Best Day Trips from Vienna, Personally Tested",
+  "sectionTitle": "Browse Daytrips",
+  "intro": "All of our guides were created by personally testing out the daytrips in all cities.",
+  "cards": [
+    { "title": "Hallstatt Daytrip", "href": "/vienna-to-hallstatt-day-trip", "image": "/images/untitled-design-16-c8eb59ac.webp", "alt": "Hallstatt village on the lake with mountains behind" },
+    { "title": "Wachau, Melk Abbey & Danube Valleys Daytrip", "href": "https://www.getyourguide.com/vienna-l7/wachaudanube-valley-by-bus-and-boat-from-vienna-t1805/?partner_id=AJ9XADG&cmp=short-url&mkt_cmp=true", "image": "/images/untitled-design-15-1442ab6e.webp", "alt": "Melk Abbey above the Danube valley" },
+    { "title": "Bratislava Daytrip", "href": "https://www.getyourguide.com/vienna-l7/vienna-to-bratislava-7-hour-tour-by-bus-and-boat-t36874/?partner_id=AJ9XADG&utm_medium=online_publisher&mkt_cmp=true", "image": "/images/4213cdc9-d24b-4f21-a993-26a29cf724d0-cf65b0d6.webp", "alt": "Bratislava Castle above the old town" },
+    { "title": "Budapest Daytrip", "href": "https://www.getyourguide.com/vienna-l7/budapest-small-group-day-trip-from-vienna-t432731/?partner_id=AJ9XADG&utm_medium=online_publisher&mkt_cmp=true", "image": "/images/14-grid-night-cruises-bffd9e81.webp", "alt": "Budapest by night along the Danube" },
+    { "title": "Woods Tour With Underground Lake and Wine", "href": "https://www.getyourguide.com/vienna-l7/vienna-vienna-woods-tour-with-underground-lake-and-wine-t823268/?partner_id=AJ9XADG&utm_medium=online_publisher&mkt_cmp=true", "image": "/images/untitled-design-18-30721905.webp", "alt": "Vienna Woods tour with underground lake and wine" }
+  ]
+}
